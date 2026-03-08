@@ -23,7 +23,6 @@ To do...
    - Tune EGS simulation
    - Rate scaling
    - Portamento and glissando
-   - Optimise to squeeze in more voices (?)
 
 Limitations...
    - DAC implementation is quite different to the original. Dynamic range might be reduced?
@@ -35,15 +34,15 @@ Deviations/enhancements compared to a real DX7...
    + Each voice has it's own patch state (in theory when supported could load a different patch into each voice)
    + Support for 128 voice patches (DX7 had 32 internal and 32 cartridge)
 
-See the [software blog](https://github.com/AnotherJohnH/picoX7/wiki/Software-Blog) and [hardware blog](https://github.com/AnotherJohnH/picoX7/wiki/Hardware-Blog)  for more detailed progress updates.
+See the [software blog](https://github.com/SloeComputers/picoX7/wiki/Software-Blog) and [hardware blog](https://github.com/SloeComputers/picoX7/wiki/Hardware-Blog)  for more detailed progress updates.
 
 ## Hardware
 
-![prototype](https://github.com/AnotherJohnH/Hardware/raw/main/picoX7/docs/breadboard_v0.04.jpg)
+![prototype](https://github.com/SloeComputers/Hardware/raw/main/picoX7/docs/breadboard_v0.04.jpg)
 
-[Schematic](https://github.com/AnotherJohnH/Hardware/blob/main/picoX7/docs/schematic_v0.05.pdf) for the above.
+[Schematic](https://github.com/SloeComputers/Hardware/blob/main/picoX7/docs/schematic_v0.05.pdf) for the above.
 
-For more information see [README](https://github.com/AnotherJohnH/Hardware/blob/main/picoX7/README.md) and the [hardware blog](https://github.com/AnotherJohnH/picoX7/wiki/Hardware-Blog)
+For more information see [README](https://github.com/SloeComputers/Hardware/blob/main/picoX7/README.md) and the [hardware blog](https://github.com/SloeComputers/picoX7/wiki/Hardware-Blog)
 
 The Pico is significantly overclocked to 191.08 MHz to support 16 voices and generate a jitter free sample rate of 49096 Hz.
 
@@ -56,15 +55,15 @@ RP2350 Picos as well as the older RP2040 Picos are supported.
 This repo uses git sub-modules, so checkout using --recurse to clone all the
 dependent source...
 
-    git clone --recurse https://github.com/AnotherJohnH/picoX7.git
+    git clone --recurse https://github.com/SloeComputers/picoX7.git
 
 or
 
-    git clone --recurse ssh://git@github.com/AnotherJohnH/picoX7.git
+    git clone --recurse ssh://git@github.com/SloeComputers/picoX7.git
 
 ### Software dependencies
 
-+ https://github.com/AnotherJohnH/Platform
++ https://github.com/SloeComputers/Platform
 + arm-none-eabi-gcc
 + cmake via UNIX make or auto detection of ninja if installed
 + Python3

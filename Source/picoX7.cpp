@@ -61,7 +61,7 @@ static hw::Buttons           buttons{/* irq */ false};
 // --- USB MIDI and FILE -----------------------------------------------------------
 
 static hw::FilePortal file_portal{"picoX7",
-                                  "https://github.com/AnotherJohnH/picoX7/"};
+                                  "https://github.com/SloeComputers/picoX7/"};
 
 static hw::UsbFileMidi usb{0x91C0, "picoX7", file_portal};
 
