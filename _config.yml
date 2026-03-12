@@ -1,0 +1,4 @@
+theme: jekyll-theme-slate
+title: picoX7
+description: A Sloe Computers Project
+exclude: Platform
