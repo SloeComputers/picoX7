@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "STB/MIDIInstrument.h"
+#include "MIDI/Instrument.h"
 
 //! Synth external interface
 class Synth : public MIDI::Instrument
