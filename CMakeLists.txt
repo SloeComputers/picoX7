@@ -11,8 +11,8 @@ project(picoX7
 
 include(CTest)
 
-set(HARDWARE picoX7)
+set(HWR_CONFIG picoX7)
 
-add_subdirectory(Platform/Hardware)
+add_subdirectory(Platform)
 add_subdirectory(Source)
 add_subdirectory(docs/Research)

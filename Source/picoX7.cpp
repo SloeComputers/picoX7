@@ -8,8 +8,8 @@
 #include <cstdio>
 #include <unistd.h>
 
-#include "Hardware/picoX7/Config.h"
-#include "Hardware/FilePortal.h"
+#include "HWR/picoX7/Config.h"
+#include "HWR/FilePortal.h"
 
 #if not defined(HW_NATIVE)
 
