@@ -8,8 +8,8 @@
 #include <cstdio>
 #include <unistd.h>
 
-#include "Hardware/picoX7/Config.h"
-#include "Hardware/FilePortal.h"
+#include "HWR/picoX7/Config.h"
+#include "HWR/FilePortal.h"
 
 #if not defined(HW_NATIVE)
 
@@ -50,27 +50,27 @@ static unsigned                              synth_index{0};
 
 // -----------------------------------------------------------------------------
 
-static hw::Profiler<PROFILE> profiler_core0{};
-static hw::Profiler<PROFILE> profiler_core1{};
-static hw::PhysMidi          phys_midi{};
-static hw::Led7Seg           led_7seg;
-static hw::Lcd               lcd{};            //!< 16x2 LCD
-static hw::Led               led{};
-static hw::Buttons           buttons{/* irq */ false};
+static HWR::Profiler<PROFILE> profiler_core0{};
+static HWR::Profiler<PROFILE> profiler_core1{};
+static HWR::PhysMidi          phys_midi{};
+static HWR::Led7Seg           led_7seg;
+static HWR::Lcd               lcd{};            //!< 16x2 LCD
+static HWR::Led               led{};
+static HWR::Buttons           buttons{/* irq */ false};
 
 // --- USB MIDI and FILE -----------------------------------------------------------
 
-static hw::FilePortal file_portal{"picoX7",
+static HWR::FilePortal file_portal{"picoX7",
                                   "https://github.com/SloeComputers/picoX7/"};
 
-static hw::UsbFileMidi usb{0x91C0, "picoX7", file_portal};
+static HWR::UsbFileMidi usb{0x91C0, "picoX7", file_portal};
 
 extern "C" void IRQ_USBCTRL() { usb.irq(); }
 
 
 // --- DAC ---------------------------------------------------------------------
 
-static hw::Audio<SAMPLES_PER_TICK> audio{DAC_FREQ, /* stereo_pairs */ true};
+static HWR::Audio<SAMPLES_PER_TICK> audio{DAC_FREQ, /* stereo_pairs */ true};
 
 static void hwTick();
 
@@ -180,7 +180,7 @@ void main_1()
 #elif defined(HW_DAC_NATIVE)
 
 template<>
-void hw::Audio<SAMPLES_PER_TICK>::getSamples32(uint32_t* buffer, unsigned n)
+void HWR::Audio<SAMPLES_PER_TICK>::getSamples32(uint32_t* buffer, unsigned n)
 {
    (void) BUFFER_SIZE;
 

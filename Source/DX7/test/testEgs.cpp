@@ -6,7 +6,7 @@
 #include "DX7/Egs.h"
 
 #include "DX7/SysEx.h"
-#include "DX7/DX7Firmware.h"
+#include "DX7/Firmware.h"
 
 #include "Table_dx7_rom_1.h"
 
