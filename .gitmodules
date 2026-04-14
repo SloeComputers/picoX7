@@ -1,3 +1,3 @@
-[submodule "Platform"]
-	path = Platform
-	url = git@github.com:/SloeComputers/Platform.git
+[submodule "PDK"]
+	path = PDK
+	url = git@github.com:/SloeComputers/PDK.git

@@ -13,6 +13,6 @@ include(CTest)
 
 set(HWR_CONFIG picoX7)
 
-add_subdirectory(Platform)
+add_subdirectory(PDK)
 add_subdirectory(Source)
 add_subdirectory(docs/Research)

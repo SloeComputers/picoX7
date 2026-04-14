@@ -63,7 +63,7 @@ or
 
 ### Software dependencies
 
-+ https://github.com/SloeComputers/Platform
++ https://github.com/SloeComputers/PDK
 + arm-none-eabi-gcc
 + cmake via UNIX make or auto detection of ninja if installed
 + Python3
@@ -81,7 +81,7 @@ Build a single hardware target e.g. rpipico2 using cmake...
 
     mkdir build
     cd build
-    cmake -DCMAKE_BUILD_TYPE=Release -DPLT_TARGET=rp2350 -DCMAKE_TOOLCHAIN_FILE=Platform/MTL/rp2350/target/toolchain.cmake ..
+    cmake -DCMAKE_BUILD_TYPE=Release -DPLT_TARGET=rp2350 -DCMAKE_TOOLCHAIN_FILE=PDK/MTL/rp2350/target/toolchain.cmake ..
     make
 
 flashable images will be found under the build sub-directory here...
