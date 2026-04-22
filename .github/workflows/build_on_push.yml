@@ -1,0 +1,78 @@
+name: build_on_push
+
+on: [push]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+
+  #---------------------------------------------------------------------
+  # MacOS CI
+
+  build_MacOS:
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+       submodules: 'recursive'
+
+    - name: Install dependencies
+      run:  brew install SDL2
+
+    - name: Prepare build
+      run: cmake -E make_directory ${{github.workspace}}/build_mac
+
+    - name: Configure build
+      working-directory: ${{github.workspace}}/build_mac
+      shell: bash
+      run: cmake -DBUILD_TESTING=ON ..
+
+    - name: Build
+      working-directory: ${{github.workspace}}/build_mac
+      shell: bash
+      run: make
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build_mac
+      shell: bash
+      # Execute tests defined by the CMake configuration.
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: ctest -V -C $BUILD_TYPE
+
+  #---------------------------------------------------------------------
+  # Linux CI
+
+  build_Linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+       submodules: 'recursive'
+
+    - name: Install dependencies
+      run: |
+           sudo apt-get update
+           sudo apt-get install -y libsdl2-dev
+
+    - name: Prepare build
+      run: cmake -E make_directory ${{github.workspace}}/build_linux
+
+    - name: Configure CMake
+      shell: bash
+      working-directory: ${{github.workspace}}/build_linux
+      run: export SDL2_DIR=${{github.workspace}}/.github/workflows; cmake -DBUILD_TESTING=ON ..
+
+    - name: Build
+      working-directory: ${{github.workspace}}/build_linux
+      shell: bash
+      run: make
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build_linux
+      shell: bash
+      # Execute tests defined by the CMake configuration.
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: ctest -V -C $BUILD_TYPE

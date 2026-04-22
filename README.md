@@ -10,6 +10,8 @@ Slightly boring [video](https://youtu.be/ZSuNV67vHK8) of the picoX7 playing the 
 
 ## Status
 
+[![Build Status](https://github.com/SloeComputers/picoX7/actions/workflows/build_on_push.yml/badge.svg)](https://github.com/SloeComputers/picoX7/actions/workflows/build_on_push.yml)
+
 Done...
    + I2S (via PIO) 16-bit stereo DAC interface at 49096 Hz
    + Use of the 2nd Arm Cortex-M, 8 voices per core

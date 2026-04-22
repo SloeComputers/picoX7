@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Copyright (c) 2023 John D. Haughton
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
@@ -9,6 +9,9 @@ project(picoX7
         LANGUAGES CXX C ASM
         VERSION 0.21)
 
+if(NOT DEFINED BUILD_TESTING)
+    set(BUILD_TESTING OFF CACHE BOOL "Build unit tests")
+endif()
 include(CTest)
 
 set(HWR_CONFIG picoX7)

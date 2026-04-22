@@ -1,4 +1,5 @@
 theme: jekyll-theme-slate
 title: picoX7
-description: A Sloe Computers Project
-exclude: Platform
+description: A SloeComputers Project
+exclude:
+   - PDK
