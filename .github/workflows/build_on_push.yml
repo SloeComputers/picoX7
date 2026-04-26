@@ -14,7 +14,7 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
        submodules: 'recursive'
 
@@ -39,59 +39,10 @@ jobs:
       shell: bash
       run: ctest -V -C $BUILD_TYPE
 
-  #---------------------------------------------------------------------
-  # RP2040 CI
-
-  build_rp2040:
-    runs-on: macOS-latest
-
-    steps:
-    - uses: actions/checkout@v4
+    - uses: actions/upload-artifact@v7
       with:
-       submodules: 'recursive'
-
-    - name: Install dependencies
-      run:  brew install arm-none-eabi-gcc
-
-    - name: Prepare build
-      run: mkdir -p ${{github.workspace}}/build/rp2040
-
-    - name: Configure build
-      working-directory: ${{github.workspace}}/build/rp2040
-      shell: bash
-      run: cmake -DPDK_TARGET=rp2040 -DCMAKE_TOOLCHAIN_FILE=PDK/MTL/rp2040/target/toolchain.cmake ../..
-
-    - name: Build
-      working-directory: ${{github.workspace}}/build/rp2040
-      shell: bash
-      run: make
-
-  #---------------------------------------------------------------------
-  # RP2350 CI
-
-  build_rp2350:
-    runs-on: macOS-latest
-
-    steps:
-    - uses: actions/checkout@v4
-      with:
-       submodules: 'recursive'
-
-    - name: Install dependencies
-      run:  brew install arm-none-eabi-gcc
-
-    - name: Prepare build
-      run: mkdir -p ${{github.workspace}}/build/rp2350
-
-    - name: Configure build
-      working-directory: ${{github.workspace}}/build/rp2350
-      shell: bash
-      run: cmake -DPDK_TARGET=rp2350 -DCMAKE_TOOLCHAIN_FILE=PDK/MTL/rp2350/target/toolchain.cmake ../..
-
-    - name: Build
-      working-directory: ${{github.workspace}}/build/rp2350
-      shell: bash
-      run: make
+        name: picoX7_MacOS
+        path: ${{github.workspace}}/build/macOS/*_NATIVE
 
   #---------------------------------------------------------------------
   # Linux CI
@@ -100,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
        submodules: 'recursive'
 
@@ -126,3 +77,45 @@ jobs:
       working-directory: ${{github.workspace}}/build/linux
       shell: bash
       run: ctest -V -C $BUILD_TYPE
+
+    - uses: actions/upload-artifact@v7
+      with:
+        name: picoX7_Linux
+        path: ${{github.workspace}}/build/linux/*_NATIVE
+
+  #---------------------------------------------------------------------
+  # MTL target CI
+
+  build_MTL:
+    runs-on: macOS-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [rp2040, rp2350]
+
+    steps:
+    - uses: actions/checkout@v6
+      with:
+       submodules: 'recursive'
+
+    - name: Install dependencies
+      run:  brew install arm-none-eabi-gcc
+
+    - name: Prepare build
+      run: mkdir -p ${{github.workspace}}/build/${{matrix.target}}
+
+    - name: Configure build
+      working-directory: ${{github.workspace}}/build/${{matrix.target}}
+      shell: bash
+      run: cmake -DPDK_TARGET=${{matrix.target}} -DCMAKE_TOOLCHAIN_FILE=PDK/MTL/${{matrix.target}}/target/toolchain.cmake ../..
+
+    - name: Build
+      working-directory: ${{github.workspace}}/build/${{matrix.target}}
+      shell: bash
+      run: make
+
+    - uses: actions/upload-artifact@v7
+      with:
+        name: picoX7_${{matrix.target}}
+        path: |
+          ${{github.workspace}}/build/${{matrix.target}}/*.uf2
