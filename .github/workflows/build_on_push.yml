@@ -107,7 +107,7 @@ jobs:
     - name: Configure build
       working-directory: ${{github.workspace}}/build/${{matrix.target}}
       shell: bash
-      run: cmake -DPDK_TARGET=${{matrix.target}} -DCMAKE_TOOLCHAIN_FILE=PDK/MTL/${{matrix.target}}/target/toolchain.cmake ../..
+      run: cmake ../.. -DCMAKE_TOOLCHAIN_FILE=PDK/TGT/${{matrix.target}}/toolchain.cmake
 
     - name: Build
       working-directory: ${{github.workspace}}/build/${{matrix.target}}
