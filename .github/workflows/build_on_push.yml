@@ -8,47 +8,14 @@ env:
 jobs:
 
   #---------------------------------------------------------------------
-  # MacOS CI
-
-  build_MacOS:
-    runs-on: macOS-latest
-
-    steps:
-    - uses: actions/checkout@v6
-      with:
-       submodules: 'recursive'
-
-    - name: Install dependencies
-      run:  brew install SDL2
-
-    - name: Prepare build
-      run: mkdir -p ${{github.workspace}}/build/macOS
-
-    - name: Configure build
-      working-directory: ${{github.workspace}}/build/macOS
-      shell: bash
-      run: cmake -DBUILD_TESTING=ON ../..
-
-    - name: Build
-      working-directory: ${{github.workspace}}/build/macOS
-      shell: bash
-      run: make
-
-    - name: Test
-      working-directory: ${{github.workspace}}/build/macOS
-      shell: bash
-      run: ctest -V -C $BUILD_TYPE
-
-    - uses: actions/upload-artifact@v7
-      with:
-        name: picoX7_MacOS
-        path: ${{github.workspace}}/build/macOS/*_NATIVE
-
-  #---------------------------------------------------------------------
   # Linux CI
 
   build_Linux:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [rp2040, rp2350, native]
 
     steps:
     - uses: actions/checkout@v6
@@ -59,39 +26,46 @@ jobs:
       run: |
            sudo apt-get update
            sudo apt-get install -y libsdl2-dev
+           sudo apt-get install -y gcc-arm-none-eabi
 
     - name: Prepare build
-      run: mkdir -p ${{github.workspace}}/build/linux
+      run: mkdir -p ${{github.workspace}}/build/${{matrix.target}}
 
     - name: Configure CMake
       shell: bash
-      working-directory: ${{github.workspace}}/build/linux
-      run: export SDL2_DIR=${{github.workspace}}/.github/workflows; cmake -DBUILD_TESTING=ON ../..
+      working-directory: ${{github.workspace}}/build/${{matrix.target}}
+      run: |
+        export SDL2_DIR=${{github.workspace}}/.github/workflows
+        cmake ../.. -DCMAKE_TOOLCHAIN_FILE=PDK/TGT/${{matrix.target}}/toolchain.cmake -DBUILD_TESTING=ON
 
     - name: Build
-      working-directory: ${{github.workspace}}/build/linux
+      working-directory: ${{github.workspace}}/build/${{matrix.target}}
       shell: bash
       run: make
 
     - name: Test
-      working-directory: ${{github.workspace}}/build/linux
+      working-directory: ${{github.workspace}}/build/${{matrix.target}}
       shell: bash
       run: ctest -V -C $BUILD_TYPE
 
     - uses: actions/upload-artifact@v7
       with:
-        name: picoX7_Linux
-        path: ${{github.workspace}}/build/linux/*_NATIVE
+        name: piocoX7_Linux_${{matrix.target}}
+        path: |
+          ${{github.workspace}}/build/${{matrix.target}}/*.uf2
+          ${{github.workspace}}/build/${{matrix.target}}/*.hex
+          ${{github.workspace}}/build/${{matrix.target}}/*.bin
+          ${{github.workspace}}/build/${{matrix.target}}/*_NATIVE
 
   #---------------------------------------------------------------------
-  # MTL target CI
+  # macOS CI
 
-  build_MTL:
+  build_macOS:
     runs-on: macOS-latest
     strategy:
       fail-fast: false
       matrix:
-        target: [rp2040, rp2350]
+        target: [rp2040, rp2350, native]
 
     steps:
     - uses: actions/checkout@v6
@@ -99,7 +73,9 @@ jobs:
        submodules: 'recursive'
 
     - name: Install dependencies
-      run:  brew install arm-none-eabi-gcc
+      run: |
+        brew install arm-none-eabi-gcc
+        brew install SDL2
 
     - name: Prepare build
       run: mkdir -p ${{github.workspace}}/build/${{matrix.target}}
@@ -107,15 +83,24 @@ jobs:
     - name: Configure build
       working-directory: ${{github.workspace}}/build/${{matrix.target}}
       shell: bash
-      run: cmake ../.. -DCMAKE_TOOLCHAIN_FILE=PDK/TGT/${{matrix.target}}/toolchain.cmake
+      run: |
+         cmake ../.. -DCMAKE_TOOLCHAIN_FILE=PDK/TGT/${{matrix.target}}/toolchain.cmake -DBUILD_TESTING=ON
 
     - name: Build
       working-directory: ${{github.workspace}}/build/${{matrix.target}}
       shell: bash
       run: make
 
+    - name: Test
+      working-directory: ${{github.workspace}}/build/${{matrix.target}}
+      shell: bash
+      run: ctest -V -C $BUILD_TYPE
+
     - uses: actions/upload-artifact@v7
       with:
-        name: picoX7_${{matrix.target}}
+        name: picoX7_macOS_${{matrix.target}}
         path: |
           ${{github.workspace}}/build/${{matrix.target}}/*.uf2
+          ${{github.workspace}}/build/${{matrix.target}}/*.hex
+          ${{github.workspace}}/build/${{matrix.target}}/*.bin
+          ${{github.workspace}}/build/${{matrix.target}}/*_NATIVE
