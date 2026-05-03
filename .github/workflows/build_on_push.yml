@@ -36,7 +36,7 @@ jobs:
       working-directory: ${{github.workspace}}/build/${{matrix.target}}
       run: |
         export SDL2_DIR=${{github.workspace}}/.github/workflows
-        cmake ../.. -DCMAKE_TOOLCHAIN_FILE=PDK/TGT/${{matrix.target}}/toolchain.cmake -DBUILD_TESTING=ON
+        cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=PDK/TGT/${{matrix.target}}/toolchain.cmake -DBUILD_TESTING=ON
 
     - name: Build
       working-directory: ${{github.workspace}}/build/${{matrix.target}}
@@ -50,7 +50,7 @@ jobs:
 
     - uses: actions/upload-artifact@v7
       with:
-        name: piocoX7_Linux_${{matrix.target}}
+        name: picoX7_Linux_${{matrix.target}}
         path: |
           ${{github.workspace}}/build/${{matrix.target}}/*.uf2
           ${{github.workspace}}/build/${{matrix.target}}/*.hex
@@ -84,7 +84,7 @@ jobs:
       working-directory: ${{github.workspace}}/build/${{matrix.target}}
       shell: bash
       run: |
-         cmake ../.. -DCMAKE_TOOLCHAIN_FILE=PDK/TGT/${{matrix.target}}/toolchain.cmake -DBUILD_TESTING=ON
+         cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=PDK/TGT/${{matrix.target}}/toolchain.cmake -DBUILD_TESTING=ON
 
     - name: Build
       working-directory: ${{github.workspace}}/build/${{matrix.target}}
