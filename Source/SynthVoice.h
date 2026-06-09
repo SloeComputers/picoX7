@@ -6,11 +6,12 @@
 #pragma once
 
 #include <cstdint>
+#include <cstdio>
 
 #include "Synth.h"
 
 template <typename VOICE, unsigned NUM_VOICES, unsigned AMP_N = NUM_VOICES>
-class SynthVoice: public Synth
+class SynthVoice : public Synth
 {
 public:
    SynthVoice()

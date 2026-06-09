@@ -105,6 +105,29 @@ a runable binary image will be found under the build subdirectory here...
 
     build/Source/picoX7_NATIVE
 
+#### Building as a VST3 plugin
+
+Download and unpack VST SDK. e.g. vst-sdk_3.8.0_build-66_2025-10-20.zip
+
+The environment variable `VST_SDK` needs to be made available and point at an install of the VST3 SDK source.
+
+Indirect build with cmake and make (or ninja)...
+
+```
+make vst3
+```
+
+Build the native target...
+
+```
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DPDK_TARGET=vst3
+make
+```
+
+The built `.vst3` bundle will be under the CMake build output directory.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details

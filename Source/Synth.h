@@ -5,14 +5,16 @@
 
 #pragma once
 
-#include "MIDI/Instrument.h"
+#include <cstdlib>
+
+#include "MIDI/Synth.h"
 
 //! Synth external interface
-class Synth : public MIDI::Instrument
+class Synth : public MIDI::Synth
 {
 public:
    Synth(unsigned num_voices_)
-      : MIDI::Instrument(num_voices_)
+      : MIDI::Synth(num_voices_)
    {
    }
 

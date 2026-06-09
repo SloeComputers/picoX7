@@ -7,7 +7,11 @@ cmake_minimum_required(VERSION 3.20)
 
 project(picoX7
         LANGUAGES CXX C ASM
-        VERSION 0.21)
+        VERSION 0.21
+        HOMEPAGE_URL "https://github.com/SloeComputers/picoX7")
+
+set(PDK_PROJ_OWNER "Sloe Computers")
+set(PDK_PROJ_EMAIL "sloecomputer@gmail.com")
 
 if(NOT DEFINED BUILD_TESTING)
     set(BUILD_TESTING OFF CACHE BOOL "Build unit tests")
