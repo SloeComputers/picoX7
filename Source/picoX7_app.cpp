@@ -34,8 +34,8 @@ namespace MTL { Clocks::SysFreq clocks_sys_freq = Clocks::SYS_FREQ_191_08_MHZ; }
 
 #endif
 
-static const unsigned DAC_FREQ         = 49096;                 //!< DAC sample rate (Hz)
-static const unsigned TICK_RATE        = 375;                   //!< 6800 firmware tick (375 Hz)
+static const unsigned DAC_FREQ         = DX7::SAMPLE_RATE;      //!< DAC sample rate (Hz)
+static const unsigned TICK_RATE        = DX7::TICK_RATE;        //!< firmware tick (375 Hz)
 static const unsigned SAMPLES_PER_TICK = DAC_FREQ / TICK_RATE;  //!< DAC buffer size (16 bit samples)
 static const unsigned BUFFER_SIZE      = SAMPLES_PER_TICK / 2;  //!< DAC buffer size (32 bit sample pairs)
 static const unsigned NUM_VOICES       = 16;                    //!< Polyphony

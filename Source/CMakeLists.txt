@@ -10,7 +10,7 @@ if("${PDK_TARGET}" STREQUAL "vst3")
    smtg_enable_vst3_sdk()
 
    smtg_add_vst3plugin(picoX7
-                       plugin.cpp)
+                       picoX7_plugin.cpp)
 
    target_include_directories(picoX7 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -39,7 +39,7 @@ if("${PDK_TARGET}" STREQUAL "vst3")
 else()
 
    add_picoX7_executable(picoX7
-                            picoX7.cpp
+                            picoX7_app.cpp
                          LIBRARIES
                             DX7 SIG_FL32)
 

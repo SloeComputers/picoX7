@@ -20,6 +20,9 @@
 
 namespace DX7 {
 
+constexpr unsigned SAMPLE_RATE = 49096; //!< DX7 sample rate (Hz)
+constexpr unsigned TICK_RATE   = 375;   //!< DX7 firmware tick (375 Hz)
+
 template <unsigned N, unsigned AMP_N = N>
 class Synth : public SynthVoice<Voice,N,AMP_N>
 {

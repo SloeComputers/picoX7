@@ -7,11 +7,7 @@
 
 #include "DX7/Synth.h"
 
-static const unsigned DAC_FREQ         = 48000;                 //!< DAC sample rate (Hz)
-static const unsigned TICK_RATE        = 375;                   //!< 6800 firmware tick (375 Hz)
-static const unsigned SAMPLES_PER_TICK = DAC_FREQ / TICK_RATE;  //!< DAC buffer size (16 bit samples)
-
-class PluginSynth : public DX7::Synth<16>
+class PluginSynth : public DX7::Synth</* NUM_VOICES */ 16>
 {
 public:
    PluginSynth()
@@ -19,8 +15,22 @@ public:
       programChange(0, 0);
    }
 
+   void setSampleRate(unsigned sample_rate_) override
+   {
+      sample_rate = sample_rate_;
+   }
+
    SIG::Signal sample() override
    {
+      // TODO re-sample
+      return dx7_sample();
+   }
+
+private:
+   SIG::Signal dx7_sample()
+   {
+      constexpr unsigned SAMPLES_PER_TICK = DX7::SAMPLE_RATE / DX7::TICK_RATE;
+
       if (--samples_to_tick < 0)
       {
          samples_to_tick = SAMPLES_PER_TICK - 1;
@@ -32,8 +42,8 @@ public:
       return ((value << 16) >> 16) / 32768.0;
    }
 
-private:
-   signed samples_to_tick{};
+   signed   samples_to_tick{0};
+   unsigned sample_rate{};
 };
 
 MIDI::Synth* MIDI::Synth::construct()
