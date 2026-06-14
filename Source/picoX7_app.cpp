@@ -142,7 +142,7 @@ void MTL::Audio::getSamples(uint32_t* buffer, unsigned n)
 
    for(unsigned i = 0; i < SAMPLES_PER_TICK; i++)
    {
-      int16_t sample = dx7.getSample(0, NUM_VOICES / 2);
+      int16_t sample = dx7.getSampleSingle(0, NUM_VOICES / 2);
       left_buffer[i * 2] = audio.packSamples(sample, 0);
    }
 
@@ -167,7 +167,7 @@ void main_1()
 
       for(unsigned i = 0; i < SAMPLES_PER_TICK; i++)
       {
-         int16_t sample = dx7.getSample(NUM_VOICES / 2, NUM_VOICES);
+         int16_t sample = dx7.getSampleSingle(NUM_VOICES / 2, NUM_VOICES);
          right_buffer[i * 2] = audio.packSamples(sample, 0);
       }
 
@@ -186,7 +186,7 @@ void HWR::Audio<SAMPLES_PER_TICK>::getSamples32(uint32_t* buffer, unsigned n)
 
    for(unsigned i = 0; i < n; ++i)
    {
-      int16_t mono = dx7.getSample(0, NUM_VOICES);
+      int16_t mono = dx7.getSampleSingle(0, NUM_VOICES);
 
       buffer[i] = (mono << 16) | (mono & 0xFFFF);
    }

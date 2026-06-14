@@ -6,6 +6,7 @@
 #undef RELEASE
 
 #include "DX7/Synth.h"
+#include "SIG/ReSample.h"
 
 class PluginSynth : public DX7::Synth</* NUM_VOICES */ 16>
 {
@@ -15,19 +16,8 @@ public:
       programChange(0, 0);
    }
 
-   void setSampleRate(unsigned sample_rate_) override
-   {
-      sample_rate = sample_rate_;
-   }
-
-   SIG::Signal sample() override
-   {
-      // TODO re-sample
-      return dx7_sample();
-   }
-
-private:
-   SIG::Signal dx7_sample()
+   //! Get DX7 rate sample
+   SIG::Signal operator()()
    {
       constexpr unsigned SAMPLES_PER_TICK = DX7::SAMPLE_RATE / DX7::TICK_RATE;
 
@@ -37,13 +27,26 @@ private:
          tick();
       }
 
-      int32_t value = getSample();
+      int32_t value = getSampleSingle();
 
       return ((value << 16) >> 16) / 32768.0;
    }
 
-   signed   samples_to_tick{0};
-   unsigned sample_rate{};
+private:
+   void setSampleRate(unsigned sample_rate_) override
+   {
+      re_sample.setOutRate(sample_rate_);
+   }
+
+   //! Get DAW rate sample
+   SIG::Signal sample() override
+   {
+      return re_sample();
+   }
+
+   signed samples_to_tick{0};
+
+   SIG::ReSample<PluginSynth,/* N */ 16> re_sample{*this, DX7::SAMPLE_RATE};
 };
 
 MIDI::Synth* MIDI::Synth::construct()

@@ -20,8 +20,8 @@ public:
    }
 
    //! Get next sample
-   int32_t getSample(unsigned first_voice_= 0,
-                     unsigned num_voices_ = NUM_VOICES)
+   int32_t getSampleSingle(unsigned first_voice_= 0,
+                           unsigned num_voices_ = NUM_VOICES)
    {
       int32_t mix {0};
 
