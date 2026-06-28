@@ -25,9 +25,7 @@ public:
       setText(0, "");
       setText(1, "");
 
-      synthInit();
-
-      for(unsigned i = 0; i < num_voices; ++i)
+      for(unsigned i = 0; i < getNumVoices(); ++i)
       {
          voiceOff(i, 0);
       }
@@ -58,10 +56,6 @@ public:
    }
 
 protected:
-   virtual void synthInit()
-   {
-   }
-
    //! Update text for the given line
    void setText(unsigned line_, const char* text_)
    {
@@ -83,25 +77,6 @@ protected:
    {
       number        = number_;
       number_update = true;
-   }
-
-   signed editInt(const char* name_, uint8_t midi_value_, signed min_, signed max_)
-   {
-      signed value = min_ + midi_value_ * (max_ - min_) / 127;
-
-      char text[17];
-      if (min_ < 0)
-      {
-         char sign = value < 0 ? '-' : value > 0 ? '+' : ' ';
-         snprintf(text, sizeof(text), "%s %c%d", name_, sign, abs(value));
-      }
-      else
-      {
-         snprintf(text, sizeof(text), "%s %d", name_, value);
-      }
-      setText(1, text);
-
-      return value;
    }
 
 private:

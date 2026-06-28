@@ -69,7 +69,8 @@ public:
          VOICE& v = voice[i];
 
          if (not v.isMute())
-            v.tick();
+            if (v.tick())
+               freeVoice(i);
       }
    }
 

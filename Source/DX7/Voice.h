@@ -23,14 +23,16 @@ public:
       fw.loadVoice(voice);
    }
 
-   void tick()
+   bool tick()
    {
       if (hw.isComplete())
       {
          mute();
+         return true;
       }
 
       fw.tick();
+      return false;
    }
 
    //! Return next sample for this voice
