@@ -41,12 +41,9 @@ static const unsigned BUFFER_SIZE      = SAMPLES_PER_TICK / 2;  //!< DAC buffer 
 static const unsigned NUM_VOICES       = 16;                    //!< Polyphony
 static const bool     MIDI_DEBUG       = false;
 static const bool     PROFILE          = false;
-static const unsigned NUM_SYNTHS       = 1;
 
 
 static DX7::Synth<NUM_VOICES, /* AMP_N */ 4> dx7{};
-static DX7::Synth<NUM_VOICES, /* AMP_N */ 4>* synth{};
-static unsigned                              synth_index{0};
 
 // -----------------------------------------------------------------------------
 
@@ -92,6 +89,8 @@ void MTL::Audio::getSamples(uint32_t* buffer, unsigned n)
    {
       buffer[i + 1] = dx7.getSamplePair(0, NUM_VOICES / 2);
    }
+
+   hwTick();
 
    dx7.tick(0, NUM_VOICES / 2);
 
@@ -146,6 +145,8 @@ void MTL::Audio::getSamples(uint32_t* buffer, unsigned n)
       left_buffer[i * 2] = audio.packSamples(sample, 0);
    }
 
+   hwTick();
+
    dx7.tick(0, NUM_VOICES / 2);
 
    profiler_core0.stop();
@@ -191,7 +192,9 @@ void HWR::Audio<SAMPLES_PER_TICK>::getSamples32(uint32_t* buffer, unsigned n)
       buffer[i] = (mono << 16) | (mono & 0xFFFF);
    }
 
-   synth->tick(0, NUM_VOICES);
+   hwTick();
+
+   dx7.tick(0, NUM_VOICES);
 }
 
 #endif
@@ -217,22 +220,17 @@ void profileReport()
 
 void initSynth()
 {
-   switch(synth_index)
-   {
-   case 0: synth = &dx7;      break;
-   }
-
-   usb.attachInstrument(1, *synth);
-   phys_midi.attachInstrument(1, *synth);
+   usb.attachInstrument(1, dx7);
+   phys_midi.attachInstrument(1, dx7);
 
    // XXX the AKAI MPK mini MIDI controller sends
    //     program changes on MIDI channel 2 #!@*4%
-   usb.attachInstrument(2, *synth);
-   phys_midi.attachInstrument(2, *synth);
+   usb.attachInstrument(2, dx7);
+   phys_midi.attachInstrument(2, dx7);
 
-   synth->init();
+   dx7.init();
 
-   synth->programChange(0, 0);
+   dx7.programChange(0, 0);
 }
 
 int main()
@@ -264,9 +262,7 @@ int main()
 
    while(true)
    {
-      led = synth->isAnyVoiceOn();
-
-      hwTick();
+      led = dx7.isAnyVoiceOn();
 
       if (PROFILE)
          profileReport();
@@ -274,7 +270,7 @@ int main()
       {
          for(unsigned line = 0; line < 2; ++line)
          {
-            const char* text = synth->getText(line);
+            const char* text = dx7.getText(line);
             if (text != nullptr)
             {
                lcd.move(0, line);
@@ -284,22 +280,9 @@ int main()
       }
 
       unsigned number{};
-      if (synth->getNumber(number))
+      if (dx7.getNumber(number))
       {
          led_7seg.printDec(number, number >= 100 ? 0 : 3);
-      }
-
-      bool     down{};
-      unsigned index{};
-
-      if (buttons.popEvent(index, down))
-      {
-         if (down)
-         {
-            synth_index = (synth_index + 1) % NUM_SYNTHS;
-
-            initSynth();
-         }
       }
 
       usleep(100000);
