@@ -23,7 +23,7 @@ public:
    int32_t getSampleSingle(unsigned first_voice_= 0,
                            unsigned num_voices_ = NUM_VOICES)
    {
-      int32_t mix {0};
+      int32_t mix{0};
 
       for(unsigned i = first_voice_; i < num_voices_; ++i)
       {
@@ -40,8 +40,8 @@ public:
    int32_t getSamplePair(unsigned first_voice_ = 0,
                          unsigned last_voice_  = NUM_VOICES)
    {
-      int32_t mix1 {0};
-      int32_t mix2 {0};
+      int32_t mix1{0};
+      int32_t mix2{0};
 
       for(unsigned i = first_voice_; i < last_voice_; ++i)
       {

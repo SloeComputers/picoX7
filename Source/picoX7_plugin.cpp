@@ -32,12 +32,12 @@ public:
       return ((value << 16) >> 16) / 32768.0;
    }
 
-private:
    void setSampleRate(unsigned sample_rate_) override
    {
       re_sample.setOutRate(sample_rate_);
    }
 
+private:
    //! Get DAW rate sample
    SIG::Signal sample() override
    {
