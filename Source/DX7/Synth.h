@@ -33,6 +33,11 @@ public:
       memcpy(internal_patches, table_dx7_rom_1, sizeof(internal_patches));
    }
 
+   void printVoice(unsigned number_)
+   {
+      edit_patch.print(number_);
+   }
+
 private:
    enum State : uint8_t
    {
@@ -153,7 +158,7 @@ private:
       case STATE_PATCH_EDIT_CSUM:
          // TODO check the checksum
          for(unsigned i = 0; i < N; ++i)
-            updateVoice(i, 0, /* update */ false);
+            updateVoice(i, 0);
          state = STATE_IGNORE;
          break;
 
@@ -200,7 +205,7 @@ private:
             buffer[index] = byte;
 
             for(unsigned i = 0; i < N; ++i)
-               updateVoice(i, 0, /* update */ true);
+               updateVoice(i, 0);
          }
          state = STATE_IGNORE;
          break;
@@ -218,7 +223,7 @@ private:
       }
    }
 
-   void updateVoice(unsigned index_, unsigned number_, bool update_)
+   void updateVoice(unsigned index_, unsigned number_)
    {
       if (index_ == 0)
       {
@@ -243,12 +248,6 @@ private:
                   edit_patch.op[1].osc_mode == SysEx::FIXED ? 'F' : 'R',
                   edit_patch.op[0].osc_mode == SysEx::FIXED ? 'F' : 'R');
          this->setText(1, line);
-
-         // Console output
-         if (not update_)
-         {
-            edit_patch.print(number_);
-         }
       }
 
       this->voice[index_].loadProgram(&edit_patch);
@@ -273,7 +272,7 @@ private:
 
       edit_patch = memory[number_ & 0x1F];
 
-      updateVoice(index_, number_ + 1, /* update */ false);
+      updateVoice(index_, number_ + 1);
    }
 
    const uint8_t ID_YAMAHA              = 67;

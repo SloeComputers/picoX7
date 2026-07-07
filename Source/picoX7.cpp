@@ -283,6 +283,8 @@ int main()
       if (dx7.getNumber(number))
       {
          led_7seg.printDec(number, number >= 100 ? 0 : 3);
+
+         dx7.printVoice(number);
       }
 
       usleep(100000);

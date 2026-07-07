@@ -39,7 +39,7 @@ if("${PDK_TARGET}" STREQUAL "vst3")
 else()
 
    add_picoX7_executable(picoX7
-                            picoX7_app.cpp
+                            picoX7.cpp
                          LIBRARIES
                             DX7 SIG_FL32)
 
