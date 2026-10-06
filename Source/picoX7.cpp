@@ -264,14 +264,14 @@ int main()
    {
       led = dx7.isAnyVoiceOn();
 
-      if (PROFILE)
+      if(PROFILE)
          profileReport();
       else
       {
          for(unsigned line = 0; line < 2; ++line)
          {
             const char* text = dx7.getText(line);
-            if (text != nullptr)
+            if(text != nullptr)
             {
                lcd.move(0, line);
                lcd.print(text);
@@ -280,7 +280,7 @@ int main()
       }
 
       unsigned number{};
-      if (dx7.getNumber(number))
+      if(dx7.getNumber(number))
       {
          led_7seg.printDec(number, number >= 100 ? 0 : 3);
 
