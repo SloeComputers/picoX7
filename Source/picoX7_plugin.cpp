@@ -17,7 +17,7 @@ public:
    }
 
    //! Get DX7 rate sample
-   SIG::Signal operator()()
+   SIG::Signal operator()(unsigned chan)
    {
       constexpr unsigned SAMPLES_PER_TICK = DX7::SAMPLE_RATE / DX7::TICK_RATE;
 
@@ -46,7 +46,7 @@ private:
 
    signed samples_to_tick{0};
 
-   SIG::ReSample<PluginSynth,/* N */ 16> re_sample{*this, DX7::SAMPLE_RATE};
+   SIG::ReSample<PluginSynth,/* CHANS */ 1, /* N */ 16> re_sample{*this, DX7::SAMPLE_RATE};
 };
 
 MIDI::Synth* MIDI::Synth::construct()

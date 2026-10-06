@@ -19,7 +19,7 @@ public:
    }
 
    //! Get DX7 rate sample
-   SIG::Signal operator()()
+   SIG::Signal operator()(unsigned chan)
    {
       constexpr unsigned SAMPLES_PER_TICK = DX7::SAMPLE_RATE / DX7::TICK_RATE;
 
@@ -48,7 +48,7 @@ private:
 
    signed samples_to_tick{0};
 
-   SIG::ReSample<PluginSynth,/* N */ 16> re_sample{*this, DX7::SAMPLE_RATE};
+   SIG::ReSample<PluginSynth,/* CHANS */ 1, /* N */ 16> re_sample{*this, DX7::SAMPLE_RATE};
 };
 
 
@@ -63,7 +63,7 @@ TEST(Synth, note)
       if (i == 20)
          synth.noteOn(/* chan */ 0, /* note */ 69, /* velocity */ 127);
 
-      SIG::Signal value = synth();
+      SIG::Signal value = synth(0);
       printf("%5u; %f\n", i, value);
    }
 }
